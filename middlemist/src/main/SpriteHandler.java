@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 
 import entity.Entity;
 
@@ -14,29 +15,29 @@ public class SpriteHandler {
 
 	public BufferedImage getSprite(Entity ent) {
 		BufferedImage sprite = null;
-		int spriteX = 0, spriteY = 0, colCount = 1, rowCount = 1, sheetW = ent.spriteSheet.getWidth(), sheetH = ent.spriteSheet.getHeight();
+		int spriteX = 0, spriteY = 0, colCount = 0, rowCount = 0, sheetW = ent.spriteSheet.getWidth(), sheetH = ent.spriteSheet.getHeight();
 		int maxCols = sheetW / gp.tileSize;
 		int maxRows = sheetH / gp.tileSize;
+		int maxSprites = maxCols * maxRows;
 		for (int i = 0; i < ent.spriteIndex; i++) {
-			colCount++;
-			if (colCount > maxCols) {
-				rowCount++;
-				if (rowCount > maxRows) {
-					spriteX = 0;
-					spriteY = 0;
-					colCount = 0;
-					rowCount = 0;
-				}
-				else {
-					spriteY += gp.tileSize;
-					spriteX = 0;
-					colCount = 0;
-				}
-			}
-			else {
-				spriteX += gp.tileSize;
-			}
+		    colCount++;
+		    if (colCount >= maxCols) {
+		        colCount = 0;
+		        rowCount++;
+		        if (rowCount >= maxRows) {
+		            // Out of bounds; reset everything
+		            colCount = 0;
+		            rowCount = 0;
+		        }
+		    }
 		}
+		if (ent.spriteIndex >= maxSprites) {
+			ent.spriteIndex = 0; // Reset to first sprite if out of bounds
+			colCount = 0;
+			rowCount = 0;
+		}
+		spriteX = colCount * gp.tileSize;
+		spriteY = rowCount * gp.tileSize;
 		if (spriteX < sheetW && spriteY < sheetH) {
 			sprite = ent.spriteSheet.getSubimage(spriteX, spriteY, gp.tileSize, gp.tileSize);
 		}
@@ -49,8 +50,33 @@ public class SpriteHandler {
 				System.err.println("Err. Sprite sheet too small, formatted improperly or does not exist");
 			}
 		}
-		System.out.println("Sprite X: " + spriteX + ", Y: " + spriteY + ", Index: " + ent.spriteIndex);
-		return sprite;
+		
+		int transCount = 0;
+		Raster transCheck = sprite.getData();
+		if (transCheck.getNumBands() == 4) {
+			// If the sprite has an alpha channel, we can check for transparency
+			for (int y = 0; y < sprite.getHeight(); y++) {
+				for (int x = 0; x < sprite.getWidth(); x++) {
+					if (sprite.getRGB(x, y) == 0x00000000) { // Check for fully transparent pixel
+						transCount++;
+					}
+				}
+			}
+		}
+		if (transCount == sprite.getWidth() * sprite.getHeight()) {
+			ent.spriteIndex = 0; // Reset to first sprite if out of bounds
+			ent.idleTimer++;
+			try {
+				sprite = ent.spriteSheet.getSubimage(0, 0, gp.tileSize, gp.tileSize);
+			}
+			catch (Exception e) {
+				System.err.println("Err. Sprite sheet too small, formatted improperly or does not exist");
+			}
+			return sprite;
+		}
+		else {
+			return sprite;
+		}
 	}
 
 }

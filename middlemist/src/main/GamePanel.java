@@ -54,6 +54,12 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	//Methods
+	
+	public void createVoidEntity(int x, int y) {
+		Entity voidEnt = new Entity("Void", x, y);
+		voidEnt.innitSheet("/res/sprites/player.png");
+		voidEnt.appendEntity();
+	}
 
 	public void pause() {
 		paused = true;
