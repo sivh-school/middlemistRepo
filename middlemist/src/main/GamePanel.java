@@ -10,14 +10,15 @@ import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Player;
+import entity.SpriteHandler;
 
 public class GamePanel extends JPanel implements Runnable {
 
 	//Variables
 
 	private static final long serialVersionUID = 1L;
-	private final int ogTileSize = 32;
-	public final int scale = 2;
+	private final int ogTileSize = 64;
+	public final int scale = 1;
 	public final int tileSize = ogTileSize * scale;
 
 	public final int maxCols = 16;
@@ -50,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
 		entities = new ArrayList<>();
 		player = new Player("Player", 0, 0, this);
 		player.innitSheet("/res/sprites/player.png");
-		player.appendEntity();
+		player.loadEntity();
 	}
 
 	//Methods
@@ -58,7 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void createVoidEntity(int x, int y) {
 		Entity voidEnt = new Entity("Void", x, y);
 		voidEnt.innitSheet("/res/sprites/player.png");
-		voidEnt.appendEntity();
+		voidEnt.loadEntity();
 	}
 
 	public void pause() {
@@ -83,11 +84,11 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	private void appendEntities() {
-		if (entities.equals(Entity.allEnts)) {
+		if (entities.equals(Entity.loadedEnts)) {
 			return;
 		} else {
 			entities.clear();
-			entities.addAll(Entity.allEnts);
+			entities.addAll(Entity.loadedEnts);
 		}
 	}
 

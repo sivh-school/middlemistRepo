@@ -6,6 +6,8 @@ import main.KeyHandler;
 public class Player extends Entity{
 	
 	private static boolean playerExists = false;
+	private int walkTimer = 0;
+	private boolean walkFrame = true, walking = false;
 	GamePanel gp;
 	KeyHandler keyH;
 	public int speed;
@@ -24,12 +26,13 @@ public class Player extends Entity{
 	}
 
 	public void playUpdate() {
-		idleTimer++;
-		if (idleTimer > 12) {
-			idleTimer = 0;
-			spriteIndex++;
+		if (walking) {
+			walkTimer++;
+			if (walkTimer > 30) {
+				walkTimer = 0;
+				walkFrame = !walkFrame;
+			}
 		}
-		System.out.println(keyH.lastKeyPressed);
 		if (keyH.escKey) {
 			if (!(gp.paused)) {
 				gp.pause();
@@ -39,19 +42,48 @@ public class Player extends Entity{
 			if (gp.paused) {
 				gp.resume();
 			}
-			else if (keyH.wKey) {
-				y -= speed;
-			}
-			else if (keyH.sKey) {
-				y += speed;
-			}
-			else if (keyH.aKey) {
-				x -= speed;
-			}
-			else if (keyH.dKey) {
-				x += speed;
+			switch (keyH.lastKeyPressed) {
+				case "w":
+					if (keyH.wKey) {
+						y -= speed;
+						walking = true;
+						playDraw(0);
+					}
+					break;
+				case "s":
+					if (keyH.sKey) {
+						y += speed;
+						walking = true;
+						playDraw(0);
+					}
+					break;
+				case "a":
+					if (keyH.aKey) {
+						x -= speed;
+						walking = true;
+						playDraw(0);
+					}
+					break;
+				case "d":
+					if (keyH.dKey) {
+						x += speed;
+						walking = true;
+						playDraw(0);
+					}
+					break;
+				default:
+					walking = false;
+					playDraw(0);
+					break;
 			}
 		}
 	}
-
+	public void playDraw(int index) {
+		if (walkFrame) {
+			spriteIndex = index;
+		}
+		else {
+			spriteIndex = index + 1;
+		}
+	}
 }

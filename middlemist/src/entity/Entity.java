@@ -11,12 +11,12 @@ public class Entity {
 
 	//Variables
 
-	public static ArrayList<Entity> allEnts = new ArrayList<>();
+	public static ArrayList<Entity> loadedEnts = new ArrayList<>();
+	public static ArrayList<Entity> unloadedEnts = new ArrayList<>();
 
 	public String entName;
 	public BufferedImage spriteSheet;
-	public int spriteIndex, x, y, idleTimer = 0;
-
+	public int spriteIndex, x, y, frameCount = 0;
 	//Constructors
 
 	public Entity(String name, int x, int y) {
@@ -24,9 +24,14 @@ public class Entity {
 		this.x = x;
 		this.y = y;
 		spriteIndex = 0;
+		innitEnt();
 	}
 
 	//Methods
+	
+	private void innitEnt() {
+		unloadedEnts.add(this);
+	}
 
 	public void innitSheet(String imgPath) {
 		BufferedImage sheet = null;
@@ -44,24 +49,31 @@ public class Entity {
 		}
 	}
 
-	public void appendEntity() {
-		if (allEnts.contains(this)) {
+	public void loadEntity() {
+		if (loadedEnts.contains(this)) {
 			System.err.println("Entity " + entName + " already exists in the list.");
 			return;
 		}
-		else if (entName == null || entName.isEmpty()) {
-			System.err.println("Entity name is null or empty. Cannot append entity.");
-			return;
-		}
 		else {
-			if (spriteSheet == null) {
-				System.err.println("Sprite sheet not initialized for entity: " + entName);
+			unloadedEnts.remove(this);
+			loadedEnts.add(this);
+			System.out.println("Entity " + entName + " appended successfully.");
+		}
+	}
+	
+	public void unloadEntity() {
+		if (loadedEnts.contains(this)) {
+			Class<? extends Entity> test = this.getClass();
+			if (test.equals(Player.class)) {
+				System.err.println("Cannot unload Player entity.");
 				return;
 			}
 			else {
-				allEnts.add(this);
-				System.out.println("Entity " + entName + " appended successfully.");
+				loadedEnts.remove(this);
+				unloadedEnts.add(this);
 			}
+		} else {
+			System.err.println("Entity " + entName + " is not loaded.");
 		}
 	}
 
