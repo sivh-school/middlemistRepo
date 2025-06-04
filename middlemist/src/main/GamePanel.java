@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.Player;
 
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel extends JPanel implements Runnable {
 
 	//Variables
 
@@ -27,11 +27,11 @@ public class GamePanel extends JPanel implements Runnable{
 
 	public final int fps = 60;
 
-	Thread gameThread;
+	public Thread gameThread;
 	public KeyHandler keyH;
-	SpriteHandler spriteH;
-	ArrayList<Entity> entities;
-	Player player;
+	public SpriteHandler spriteH;
+	public ArrayList<Entity> entities;
+	public Player player;
 
 	private volatile boolean running = true;
     public volatile boolean paused = false;
@@ -42,12 +42,14 @@ public class GamePanel extends JPanel implements Runnable{
 		this.setPreferredSize(new Dimension(screenW, screenH));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
-		this.setFocusable(false);
+		this.setFocusable(true);
+		this.requestFocusInWindow();
 		spriteH = new SpriteHandler(this);
 		keyH = new KeyHandler();
 		this.addKeyListener(keyH);
+		entities = new ArrayList<>();
 		player = new Player("Player", 0, 0, this);
-		player.innitSheet("/middlemist/res/spriteSheets/playerSheetTemp.png");
+		player.innitSheet("/res/sprites/player.png");
 		player.appendEntity();
 	}
 
@@ -55,8 +57,10 @@ public class GamePanel extends JPanel implements Runnable{
 
 	public void pause() {
 		paused = true;
+		System.out.println("Game paused. Press Escape to resume.");
 	}
 	public void resume() {
+		System.out.println("Game resumed. Press Escape to pause.");
 		synchronized (gameThread) {
 			paused = false;
 			gameThread.notifyAll();
@@ -71,13 +75,19 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
+	
+	private void appendEntities() {
+		if (entities.equals(Entity.allEnts)) {
+			return;
+		} else {
+			entities.clear();
+			entities.addAll(Entity.allEnts);
+		}
+	}
 
 	private void update() {
 		appendEntities();
-	}
-
-	private void appendEntities() {
-		entities.addAll(Entity.allEnts);
+		player.playUpdate();
 	}
 
 	@Override

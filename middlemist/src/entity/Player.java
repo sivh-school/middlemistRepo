@@ -4,19 +4,32 @@ import main.GamePanel;
 import main.KeyHandler;
 
 public class Player extends Entity{
-
+	
+	private static boolean playerExists = false;
 	GamePanel gp;
 	KeyHandler keyH;
-	public int speed = 4, pauseTimer = 0;
+	public int speed;
 
 	public Player(String name, int x, int y, GamePanel gp) {
 		super(name, x, y);
-		this.gp = gp;
-		this.keyH = gp.keyH;
+		if (!(playerExists)) {
+			playerExists = true;
+			this.gp = gp;
+			this.keyH = gp.keyH;
+			speed = 4;
+		}
+		else {
+			System.err.println("Player already exists. Cannot create another instance.");
+		}
 	}
 
 	public void playUpdate() {
-
+		idleTimer++;
+		if (idleTimer > 12) {
+			idleTimer = 0;
+			spriteIndex++;
+		}
+		System.out.println(keyH.lastKeyPressed);
 		if (keyH.escKey) {
 			if (!(gp.paused)) {
 				gp.pause();
@@ -26,25 +39,17 @@ public class Player extends Entity{
 			if (gp.paused) {
 				gp.resume();
 			}
-			if (keyH.wKey) {
-				if (!(keyH.sKey || keyH.aKey || keyH.dKey)) {
-					y -= speed;
-				}
+			else if (keyH.wKey) {
+				y -= speed;
 			}
-			if (keyH.sKey) {
-				if (!(keyH.wKey || keyH.aKey || keyH.dKey)) {
-					y += speed;
-				}
+			else if (keyH.sKey) {
+				y += speed;
 			}
-			if (keyH.aKey) {
-				if (!(keyH.sKey || keyH.wKey || keyH.dKey)) {
-					x -= speed;
-				}
+			else if (keyH.aKey) {
+				x -= speed;
 			}
-			if (keyH.dKey) {
-				if (!(keyH.wKey || keyH.aKey || keyH.sKey)) {
-					x += speed;
-				}
+			else if (keyH.dKey) {
+				x += speed;
 			}
 		}
 	}
