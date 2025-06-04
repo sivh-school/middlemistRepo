@@ -45,28 +45,28 @@ public class Player extends Entity{
 			switch (keyH.lastKeyPressed) {
 				case "w":
 					if (keyH.wKey) {
-						y -= speed;
+						gp.world.y -= speed;
 						walking = true;
 						playDraw(0);
 					}
 					break;
 				case "s":
 					if (keyH.sKey) {
-						y += speed;
+						gp.world.y += speed;
 						walking = true;
 						playDraw(0);
 					}
 					break;
 				case "a":
 					if (keyH.aKey) {
-						x -= speed;
+						gp.world.x -= speed;
 						walking = true;
 						playDraw(0);
 					}
 					break;
 				case "d":
 					if (keyH.dKey) {
-						x += speed;
+						gp.world.x += speed;
 						walking = true;
 						playDraw(0);
 					}
