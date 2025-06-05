@@ -14,11 +14,15 @@ public class Main {
 		frame.setContentPane(gamePanel);
 
 		frame.pack();
+		
+		PausePanel pausePanel = new PausePanel();
+		PausePanel.setPause(pausePanel);
+		frame.add(pausePanel);
+		pausePanel.setVisible(false);
 
 		frame.setTitle("middlemist");
 		frame.setVisible(true);
 
 		gamePanel.startGameThread();
-	}
-
+	}	
 }

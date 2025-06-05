@@ -89,12 +89,14 @@ public class GamePanel extends JPanel implements Runnable {
 	public void pause() {
 		paused = true;
 		System.out.println("Game paused. Press Escape to resume.");
+		main.PausePanel.toggleVisibility();
 	}
 	public void resume() {
 		System.out.println("Game resumed. Press Escape to pause.");
 		synchronized (gameThread) {
 			paused = false;
 			gameThread.notifyAll();
+			main.PausePanel.toggleVisibility();
 		}
 	}
 	public void stop() {

@@ -59,7 +59,7 @@ public class Player extends Entity{
 					if (keyH.wKey) {
 						gp.world.y += speed;
 						walking = true;
-						playDrawWalk(2);
+						playDrawWalk(1, 0);
 					}
 					else {
 						walking = false;
@@ -69,7 +69,7 @@ public class Player extends Entity{
 					if (keyH.sKey) {
 						gp.world.y -= speed;
 						walking = true;
-						playDrawWalk(2);
+						playDrawWalk(1, 1);
 					}
 					else {
 						walking = false;
@@ -79,7 +79,7 @@ public class Player extends Entity{
 					if (keyH.aKey) {
 						gp.world.x += speed;
 						walking = true;
-						playDrawWalk(5);
+						playDrawWalk(5, 5);
 					}
 					else {
 						walking = false;
@@ -89,7 +89,7 @@ public class Player extends Entity{
 					if (keyH.dKey) {
 						gp.world.x -= speed;
 						walking = true;
-						playDrawWalk(9);
+						playDrawWalk(9, 9);
 					}
 					else {
 						walking = false;
@@ -97,13 +97,26 @@ public class Player extends Entity{
 					break;
 			}
 			if (!(walking) ) {
-				playDrawIdle(0);
+				switch (keyH.lastKeyPressed) {
+					case "w", "s":
+						playDrawIdle(0);
+						break;
+					case "a":
+						playDrawIdle(4);
+						break;
+					case "d":
+						playDrawIdle(8);
+						break;
+					default:
+						playDrawIdle(0);
+						break;
+				}
 			}
 		}
 	}
-	private void playDrawWalk(int index) {
+	private void playDrawWalk(int index, int restFrame) {
 		if (walkFrame) {
-			spriteIndex = index;
+			spriteIndex = restFrame;
 		}
 		else {
 			if (left) {
