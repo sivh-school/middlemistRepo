@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import entity.Entity;
+import entity.EntityCollider;
 import entity.EntityLoader;
 import entity.Player;
 import entity.SpriteHandler;
@@ -25,8 +26,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int scale = 1;
 	public final int tileSize = ogTileSize * scale;
 
-	public final int maxCols = 16;
-	public final int maxRows = 10;
+	public final int maxCols = 12;
+	public final int maxRows = 8;
 	public final int screenW = maxCols * tileSize;
 	public final int screenH = maxRows * tileSize;
 
@@ -56,11 +57,12 @@ public class GamePanel extends JPanel implements Runnable {
 		this.addKeyListener(keyH);
 		entities = new ArrayList<>();
 		entLoader = new EntityLoader();
-		world = new World();
+		world = new World(this);
 		innitWorld(1);
-		player = new Player("Player", screenW / 2, screenH / 2, this);
+		player = new Player("Player", (screenW / 2) - (tileSize / 2), (screenH / 2) - (tileSize / 2), this);
 		player.innitSheet("/res/sprites/player.png");
 		entLoader.loadEntity(player);
+		createVoidEntity(0, 0);
 	}
 
 	//Methods
@@ -111,16 +113,17 @@ public class GamePanel extends JPanel implements Runnable {
 		} else {
 			entities.clear();
 			entities.addAll(entLoader.loadedEnts);
-			if (!(entities.getLast().equals(player))) {
-				entities.remove(player);
-				entities.addLast(player);
-			}
+		}
+		if (entities.contains(player)) {
+			entities.remove(player);
 		}
 	}
 
 	private void update() {
 		appendEntities();
+		world.verifyPos();
 		player.playUpdate();
+		world.worldUpdate();
 	}
 
 	@Override
@@ -131,6 +134,7 @@ public class GamePanel extends JPanel implements Runnable {
 		for (Entity ent : entities) {
 			g2.drawImage(spriteH.getSprite(ent), ent.x, ent.y, tileSize, tileSize, null);
 		}
+		g2.drawImage(spriteH.getSprite(player), player.x, player.y, tileSize, tileSize, null);
 	}
 
 	@Override

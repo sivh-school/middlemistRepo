@@ -13,14 +13,17 @@ public class Entity {
 
 	public String entName;
 	public BufferedImage spriteSheet;
-	public int spriteIndex, x, y, gameX, gameY, frameCount = 0;
+	public int spriteIndex, x, y, speed = 4, frameCount = 0;
+	public EntityCollider entCollide;
+	
 	//Constructors
 
 	public Entity(String name, int x, int y) {
 		entName = name;
-		this.gameX = x;
-		this.gameY = y;
+		this.x = x;
+		this.y = y;
 		spriteIndex = 0;
+		entCollide = new EntityCollider(this, 64, 64);
 		innitEnt();
 	}
 
