@@ -1,2 +1,2 @@
 # middlemist
-Its a game that isn't done yet.
+WSAD to move, press ESC to pause the game, so far no fun just a shell.
