@@ -10,14 +10,9 @@ public class KeyHandler implements KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		int code = e.getKeyCode();
+		int code = e.getKeyChar();
 		if (code == KeyEvent.VK_ESCAPE) {
-			if (!escKey) {
-				escKey = true;
-			}
-			else {
-				escKey = false;
-			}
+			escKey = !escKey;
 		}
 	}
 

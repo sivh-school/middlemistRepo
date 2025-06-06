@@ -1,9 +1,9 @@
-package main;
+package entity;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 
-import entity.Entity;
+import main.GamePanel;
 
 public class SpriteHandler {
 
@@ -14,6 +14,9 @@ public class SpriteHandler {
 	}
 
 	public BufferedImage getSprite(Entity ent) {
+		if (ent.spriteSheet == null) {
+			ent.innitSheet("/res/sprites/exc.png");
+		}
 		BufferedImage sprite = null;
 		int spriteX = 0, spriteY = 0, colCount = 0, rowCount = 0, sheetW = ent.spriteSheet.getWidth(), sheetH = ent.spriteSheet.getHeight();
 		int maxCols = sheetW / gp.tileSize;
@@ -52,8 +55,8 @@ public class SpriteHandler {
 		}
 		
 		int transCount = 0;
-		Raster transCheck = sprite.getData();
-		if (transCheck.getNumBands() == 4) {
+		Raster rast = sprite.getData();
+		if (rast.getNumBands() == 4) {
 			// If the sprite has an alpha channel, we can check for transparency
 			for (int y = 0; y < sprite.getHeight(); y++) {
 				for (int x = 0; x < sprite.getWidth(); x++) {
@@ -65,7 +68,7 @@ public class SpriteHandler {
 		}
 		if (transCount == sprite.getWidth() * sprite.getHeight()) {
 			ent.spriteIndex = 0; // Reset to first sprite if out of bounds
-			ent.idleTimer++;
+			ent.frameCount++;
 			try {
 				sprite = ent.spriteSheet.getSubimage(0, 0, gp.tileSize, gp.tileSize);
 			}

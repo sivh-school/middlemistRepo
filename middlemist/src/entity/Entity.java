@@ -11,12 +11,11 @@ public class Entity {
 
 	//Variables
 
-	public static ArrayList<Entity> allEnts = new ArrayList<>();
-
 	public String entName;
 	public BufferedImage spriteSheet;
-	public int spriteIndex, x, y, idleTimer = 0;
-
+	public int spriteIndex, x, y, speed = 4, frameCount = 0;
+	public EntityCollider entCollide;
+	
 	//Constructors
 
 	public Entity(String name, int x, int y) {
@@ -24,9 +23,15 @@ public class Entity {
 		this.x = x;
 		this.y = y;
 		spriteIndex = 0;
+		entCollide = new EntityCollider(this, 64, 64);
+		innitEnt();
 	}
 
 	//Methods
+	
+	private void innitEnt() {
+		EntityLoader.initializedEnts.add(this);
+	}
 
 	public void innitSheet(String imgPath) {
 		BufferedImage sheet = null;
@@ -43,26 +48,4 @@ public class Entity {
 			System.err.println("Failed to load sprite sheet for entity: " + entName);
 		}
 	}
-
-	public void appendEntity() {
-		if (allEnts.contains(this)) {
-			System.err.println("Entity " + entName + " already exists in the list.");
-			return;
-		}
-		else if (entName == null || entName.isEmpty()) {
-			System.err.println("Entity name is null or empty. Cannot append entity.");
-			return;
-		}
-		else {
-			if (spriteSheet == null) {
-				System.err.println("Sprite sheet not initialized for entity: " + entName);
-				return;
-			}
-			else {
-				allEnts.add(this);
-				System.out.println("Entity " + entName + " appended successfully.");
-			}
-		}
-	}
-
 }
