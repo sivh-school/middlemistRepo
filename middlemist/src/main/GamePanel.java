@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public SpriteHandler spriteH;
 	public ArrayList<Entity> entities;
 	private Player player;
-	private EntityLoader entLoader;
+	public EntityLoader entLoader;
 	public World world;
 
 	private volatile boolean running = true;
@@ -62,7 +62,7 @@ public class GamePanel extends JPanel implements Runnable {
 		player = new Player("Player", (screenW / 2) - (tileSize / 2), (screenH / 2) - (tileSize / 2), this);
 		player.innitSheet("/res/sprites/player.png");
 		entLoader.loadEntity(player);
-		createVoidEntity(0, 0);
+		createVoidEntity(64, 64);
 	}
 
 	//Methods
@@ -70,14 +70,14 @@ public class GamePanel extends JPanel implements Runnable {
 	private void innitWorld(int i) {
 		world.x = 0;
 		world.y = 0;
-		world.worldW = tileSize * 20;
-		world.worldH = tileSize * 20;
 		try {
 			world.mapImage = ImageIO.read(getClass().getResourceAsStream("/res/maps/map" + i + ".png"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		world.worldW = world.mapImage.getWidth();
+		world.worldH = world.mapImage.getHeight();
 	}
 	
 	public void createVoidEntity(int x, int y) {
@@ -124,6 +124,9 @@ public class GamePanel extends JPanel implements Runnable {
 	private void update() {
 		appendEntities();
 		world.verifyPos();
+		for (Entity ent : entities) {
+			ent.entCollide.collisionUpdate();
+		}
 		player.playUpdate();
 		world.worldUpdate();
 	}
@@ -134,9 +137,9 @@ public class GamePanel extends JPanel implements Runnable {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(world.mapImage, world.x, world.y, world.worldW, world.worldH, null);
 		for (Entity ent : entities) {
-			g2.drawImage(spriteH.getSprite(ent), ent.x, ent.y, tileSize, tileSize, null);
+			g2.drawImage(spriteH.getSprite(ent), ent.x, ent.y, ent.width, ent.height, null);
 		}
-		g2.drawImage(spriteH.getSprite(player), player.x, player.y, tileSize, tileSize, null);
+		g2.drawImage(spriteH.getSprite(player), player.x, player.y, player.width, player.height, null);
 	}
 
 	@Override

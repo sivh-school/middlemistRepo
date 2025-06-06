@@ -17,17 +17,52 @@ public class Player extends Entity{
 			playerExists = true;
 			this.gp = gp;
 			this.keyH = gp.keyH;
+			this.entCollide.setDimensions(28, 62);
 		}
 		else {
 			System.err.println("Player already exists. Cannot create another instance.");
 		}
+	}
+	
+	private boolean verifyPos(String key) {
+	    int nextX = x;
+	    int nextY = y;
+	    switch (key) {
+	        case "w":
+	            nextY = y - speed; // Up
+	            break;
+	        case "s":
+	            nextY = y + speed; // Down
+	            break;
+	        case "a":
+	            nextX = x - speed; // Left
+	            break;
+	        case "d":
+	            nextX = x + speed; // Right
+	            break;
+	    }
+	    Entity nextPlayer = new Entity("NextPlayer", nextX, nextY);
+	    nextPlayer.entCollide.setDimensions(28, 62);
+	    entCollide.canCollide = false;
+	    nextPlayer.entCollide.collisionUpdate();
+	    nextPlayer.entCollide.canCollide = false;
+	    if (nextPlayer.entCollide.colliding) {
+	    	gp.entLoader.removeEntity(nextPlayer);
+		    entCollide.canCollide = true;
+	    	return false;
+	    }
+	    else {
+	    	gp.entLoader.removeEntity(nextPlayer);
+		    entCollide.canCollide = true;
+	    	return true;
+	    }
 	}
 
 	public void playUpdate() {
 		if (walking) {
 			idleTimer = 0;
 			walkTimer++;
-			if (walkTimer > 30) {
+			if (walkTimer > 15) {
 				legCount++;
 				walkTimer = 0;
 				walkFrame = !walkFrame;
@@ -57,7 +92,9 @@ public class Player extends Entity{
 			switch (keyH.lastKeyPressed) {
 				case "w":
 					if (keyH.wKey) {
-						gp.world.y += speed;
+						if (verifyPos("w")) {
+							gp.world.y += speed;
+						}
 						walking = true;
 						playDrawWalk(1, 0);
 					}
@@ -67,7 +104,9 @@ public class Player extends Entity{
 					break;
 				case "s":
 					if (keyH.sKey) {
-						gp.world.y -= speed;
+						if (verifyPos("s")) { 
+							gp.world.y -= speed;
+						}
 						walking = true;
 						playDrawWalk(1, 1);
 					}
@@ -77,7 +116,9 @@ public class Player extends Entity{
 					break;
 				case "a":
 					if (keyH.aKey) {
-						gp.world.x += speed;
+						if (verifyPos("a")) { 
+							gp.world.x += speed;
+						}
 						walking = true;
 						playDrawWalk(5, 5);
 					}
@@ -87,7 +128,9 @@ public class Player extends Entity{
 					break;
 				case "d":
 					if (keyH.dKey) {
-						gp.world.x -= speed;
+						if (verifyPos("d")) { 
+							gp.world.x -= speed;
+						}
 						walking = true;
 						playDrawWalk(9, 9);
 					}

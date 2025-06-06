@@ -26,8 +26,8 @@ public class World {
 		for (Entity ent : gp.entities) {
 			ent.x += xDif;
 			ent.y += yDif;
-			ent.entCollide.x = ent.x;
-			ent.entCollide.y = ent.y;
+			ent.entCollide.x = ent.x + (ent.width - ent.entCollide.width)/2;
+			ent.entCollide.y = ent.y + (ent.height - ent.entCollide.height)/2;
 		}
 	}
 

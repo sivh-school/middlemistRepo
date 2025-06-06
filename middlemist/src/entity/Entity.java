@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Entity {
 
 	public String entName;
 	public BufferedImage spriteSheet;
-	public int spriteIndex, x, y, speed = 4, frameCount = 0;
+	public int spriteIndex, x, y, speed = 4, frameCount = 0, width, height;
 	public EntityCollider entCollide;
 	
 	//Constructors
@@ -23,11 +24,19 @@ public class Entity {
 		this.x = x;
 		this.y = y;
 		spriteIndex = 0;
-		entCollide = new EntityCollider(this, 64, 64);
+		width = 64;
+		height = 64;
+		entCollide = new EntityCollider(this, width, height);
 		innitEnt();
 	}
 
 	//Methods
+	
+	public void setDimensions(int width, int height) {
+		this.width = width;
+		this.height = height;
+		entCollide = new EntityCollider(this, width, height);
+	}
 	
 	private void innitEnt() {
 		EntityLoader.initializedEnts.add(this);
