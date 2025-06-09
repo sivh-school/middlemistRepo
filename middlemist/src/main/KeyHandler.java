@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
 
-	public boolean wKey, sKey, aKey, dKey, escKey = false;
+	public boolean wKey, sKey, aKey, dKey, escKey = false, invKey = false;
 	public String lastKeyPressed = "";
 
 	@Override
@@ -13,6 +13,9 @@ public class KeyHandler implements KeyListener{
 		int code = e.getKeyChar();
 		if (code == KeyEvent.VK_ESCAPE) {
 			escKey = !escKey;
+		}
+		if (code == KeyEvent.VK_E) {
+			invKey = !invKey;
 		}
 	}
 

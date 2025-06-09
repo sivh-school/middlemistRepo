@@ -15,7 +15,7 @@ public class SpriteHandler {
 
 	public BufferedImage getSprite(Entity ent) {
 		if (ent.spriteSheet == null) {
-			ent.innitSheet("/res/sprites/exc.png");
+			ent.innitSheet("exc.png");
 		}
 		BufferedImage sprite = null;
 		int spriteX = 0, spriteY = 0, colCount = 0, rowCount = 0, sheetW = ent.spriteSheet.getWidth(), sheetH = ent.spriteSheet.getHeight();

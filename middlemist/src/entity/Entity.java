@@ -3,6 +3,7 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -11,7 +12,10 @@ import javax.imageio.ImageIO;
 public class Entity {
 
 	//Variables
-
+	
+	public static int entCount = 0;
+	
+	public int id;
 	public String entName;
 	public BufferedImage spriteSheet;
 	public int spriteIndex, x, y, speed = 4, frameCount = 0, width, height;
@@ -20,6 +24,8 @@ public class Entity {
 	//Constructors
 
 	public Entity(String name, int x, int y) {
+		entCount++;
+		id = entCount;
 		entName = name;
 		this.x = x;
 		this.y = y;
@@ -45,7 +51,7 @@ public class Entity {
 	public void innitSheet(String imgPath) {
 		BufferedImage sheet = null;
 		try {
-			sheet = ImageIO.read(getClass().getResourceAsStream(imgPath));
+			sheet = ImageIO.read(getClass().getResourceAsStream("/res/sprites/" + imgPath));
 		} catch (IOException e) {
 			System.err.println("Error loading sprite sheet for entity: " + entName);
 			e.printStackTrace();

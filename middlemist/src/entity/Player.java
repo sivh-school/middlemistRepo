@@ -1,5 +1,9 @@
 package entity;
 
+import java.util.ArrayList;
+
+import item.InventoryMenu;
+import item.Item;
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -10,6 +14,8 @@ public class Player extends Entity{
 	private boolean walkFrame = false, idleFrame = true, left = true, walking = false;
 	GamePanel gp;
 	KeyHandler keyH;
+	
+	public ArrayList<Item> inventory;
 
 	public Player(String name, int x, int y, GamePanel gp) {
 		super(name, x, y);
@@ -17,7 +23,8 @@ public class Player extends Entity{
 			playerExists = true;
 			this.gp = gp;
 			this.keyH = gp.keyH;
-			this.entCollide.setDimensions(28, 62);
+			this.entCollide.setDimensions(28, 60);
+			inventory = new ArrayList<>();
 		}
 		else {
 			System.err.println("Player already exists. Cannot create another instance.");
@@ -44,7 +51,7 @@ public class Player extends Entity{
 	    Entity nextPlayer = new Entity("NextPlayer", nextX, nextY);
 	    nextPlayer.entCollide.setDimensions(28, 62);
 	    entCollide.canCollide = false;
-	    nextPlayer.entCollide.collisionUpdate();
+	    nextPlayer.entCollide.collisionUpdate(GamePanel.world);
 	    nextPlayer.entCollide.canCollide = false;
 	    if (nextPlayer.entCollide.colliding) {
 	    	gp.entLoader.removeEntity(nextPlayer);
@@ -59,6 +66,10 @@ public class Player extends Entity{
 	}
 
 	public void playUpdate() {
+		if (keyH.invKey) {
+			InventoryMenu.toggleVisibility();
+			keyH.invKey = false; // Reset the inventory key to prevent repeated toggling
+		}
 		if (walking) {
 			idleTimer = 0;
 			walkTimer++;
@@ -93,7 +104,7 @@ public class Player extends Entity{
 				case "w":
 					if (keyH.wKey) {
 						if (verifyPos("w")) {
-							gp.world.y += speed;
+							GamePanel.world.y += speed;
 						}
 						walking = true;
 						playDrawWalk(1, 0);
@@ -105,7 +116,7 @@ public class Player extends Entity{
 				case "s":
 					if (keyH.sKey) {
 						if (verifyPos("s")) { 
-							gp.world.y -= speed;
+							GamePanel.world.y -= speed;
 						}
 						walking = true;
 						playDrawWalk(1, 1);
@@ -117,7 +128,7 @@ public class Player extends Entity{
 				case "a":
 					if (keyH.aKey) {
 						if (verifyPos("a")) { 
-							gp.world.x += speed;
+							GamePanel.world.x += speed;
 						}
 						walking = true;
 						playDrawWalk(5, 5);
@@ -129,7 +140,7 @@ public class Player extends Entity{
 				case "d":
 					if (keyH.dKey) {
 						if (verifyPos("d")) { 
-							gp.world.x -= speed;
+							GamePanel.world.x -= speed;
 						}
 						walking = true;
 						playDrawWalk(9, 9);
