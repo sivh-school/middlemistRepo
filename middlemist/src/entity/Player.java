@@ -6,9 +6,14 @@ import item.InventoryMenu;
 import item.Item;
 import main.GamePanel;
 import main.KeyHandler;
+import main.PausePanel;
 
 public class Player extends Entity{
 	
+	public static final int levelMultiplier = 25;
+	
+	public int maxHealth = 20, health = maxHealth, xp = 0, level = 1;
+	public int malice = 10, melancholy = 10, joy = 10, sorrow = 10;
 	private static boolean playerExists = false;
 	private int walkTimer = 0, idleTimer = 0, legCount = 0;
 	private boolean walkFrame = false, idleFrame = true, left = true, walking = false;
@@ -54,22 +59,18 @@ public class Player extends Entity{
 	    nextPlayer.entCollide.collisionUpdate(GamePanel.world);
 	    nextPlayer.entCollide.canCollide = false;
 	    if (nextPlayer.entCollide.colliding) {
-	    	gp.entLoader.removeEntity(nextPlayer);
+	    	GamePanel.entLoader.removeEntity(nextPlayer);
 		    entCollide.canCollide = true;
 	    	return false;
 	    }
 	    else {
-	    	gp.entLoader.removeEntity(nextPlayer);
+	    	GamePanel.entLoader.removeEntity(nextPlayer);
 		    entCollide.canCollide = true;
 	    	return true;
 	    }
 	}
 
 	public void playUpdate() {
-		if (keyH.invKey) {
-			InventoryMenu.toggleVisibility();
-			keyH.invKey = false; // Reset the inventory key to prevent repeated toggling
-		}
 		if (walking) {
 			idleTimer = 0;
 			walkTimer++;
@@ -91,15 +92,6 @@ public class Player extends Entity{
 				idleFrame = !idleFrame;
 			}
 		}
-		if (keyH.escKey) {
-			if (!(gp.paused)) {
-				gp.pause();
-			}
-		}
-		else {
-			if (gp.paused) {
-				gp.resume();
-			}
 			switch (keyH.lastKeyPressed) {
 				case "w":
 					if (keyH.wKey) {
@@ -167,7 +159,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-	}
 	private void playDrawWalk(int index, int restFrame) {
 		if (walkFrame) {
 			spriteIndex = restFrame;
@@ -188,6 +179,47 @@ public class Player extends Entity{
 		}
 		else {
 			spriteIndex = index + 1;
+		}
+	}
+	
+	public void updateStats() {
+		if (health > maxHealth) {
+			health = maxHealth;
+		}
+		else if (health < 0) {
+			health = 0;
+		}
+		if (inventory.size() > InventoryMenu.inventoryMax) {
+			ItemEntity droppedItem = new ItemEntity(inventory.get(InventoryMenu.inventoryMax).name, x, y + GamePanel.player.height, inventory.get(InventoryMenu.inventoryMax));
+			GamePanel.entLoader.loadEntity(droppedItem);
+			inventory.remove(-1);
+		}
+	}
+	
+	public String updateCharacter() {
+		String iconPath = null;
+		if (health >= maxHealth) {
+			iconPath = "/res/sprites/player.png";
+		}
+		else if (health >= maxHealth / 2) {
+			iconPath = "/res/sprites/player.png";
+		}
+		else {
+			iconPath = "/res/sprite/player.png";
+		}
+		return iconPath;
+	}
+	
+	public void pauseUpdate() {
+		if (keyH.escKey) {
+			System.out.println("Escape key pressed");
+			PausePanel.toggleVisibility();
+			keyH.escKey = false; // Reset the escape key to prevent repeated toggling
+		}
+		if (keyH.invKey) {
+			System.out.println("Inventory key pressed");
+			InventoryMenu.toggleVisibility();
+			keyH.invKey = false; // Prevents toggling inventory multiple times
 		}
 	}
 }

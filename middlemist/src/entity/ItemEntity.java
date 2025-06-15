@@ -1,5 +1,6 @@
 package entity;
 
+import item.InventoryMenu;
 import item.Item;
 import main.GamePanel;
 
@@ -11,11 +12,14 @@ public class ItemEntity extends Entity {
 		super(name, x, y);
 		itemPickup = item;
 		spriteSheet = item.icon;
+		entCollide.canCollide = false;
 	}
 	
 	public void itemUpdate() {
-		if (entCollide.colliding) {
+		if (entCollide.intersectsWith(GamePanel.player.entCollide)) {
 			GamePanel.player.inventory.add(itemPickup);
+			GamePanel.entLoader.removeEntity(this);
+			InventoryMenu.im.updateInventory();
 		}
 	}
 

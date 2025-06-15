@@ -16,6 +16,7 @@ public class PausePanel extends JPanel{
 	public PausePanel() {
 		this.setPreferredSize(new Dimension(pauseW, pauseH));
 		this.setBackground(Color.white);
+		this.setFocusable(false);
 		pauseText = new JLabel();
 		pauseText.setText("PAUSED");
 		this.add(pauseText);
@@ -27,5 +28,7 @@ public class PausePanel extends JPanel{
 	
 	public static void toggleVisibility() {
 		pp.setVisible(!pp.isVisible());
+	    GamePanel.gamePanel.togglePause();
+	    GamePanel.gamePanel.requestFocus();
 	}
 }

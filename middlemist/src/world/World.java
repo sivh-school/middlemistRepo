@@ -1,11 +1,6 @@
 package world;
 
-import java.awt.Component;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
-import javax.swing.JComponent;
-import javax.swing.border.Border;
 
 import entity.Entity;
 import entity.EntityCollider;
@@ -13,7 +8,6 @@ import main.GamePanel;
 
 public class World{
 	
-	private static final long serialVersionUID = 1L;
 	public int x, y, worldW, worldH, lastX, lastY;
 	public BufferedImage mapImage;
 	GamePanel gp;

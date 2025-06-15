@@ -1,8 +1,6 @@
 package entity;
 
 import java.util.ArrayList;
-
-import main.GamePanel;
 import world.World;
 
 public class EntityCollider {
@@ -33,7 +31,7 @@ public class EntityCollider {
     }
 	
 	public boolean intersectsWith(EntityCollider other) {
-		if (other != this && canCollide) {
+		if (other != this && canCollide || other.canCollide) {
 			return x < other.x + other.width &&
 			       x + width > other.x &&
 			       y < other.y + other.height &&
@@ -41,7 +39,6 @@ public class EntityCollider {
 		} else {
 			return false;
 		}
-		
 	}
 	
 	public void collisionUpdate() {

@@ -58,25 +58,25 @@ public class WorldEntityCreator {
 		switch (id) {
 		case -1:
 			Entity nullEnt = new Entity(name, x, y);
-			gp.entLoader.unloadEntity(nullEnt);
+			GamePanel.entLoader.unloadEntity(nullEnt);
 			break;
 		case 0:
 			Entity voidEnt = new Entity(name, x, y);
-			gp.entLoader.loadEntity(voidEnt);
+			GamePanel.entLoader.loadEntity(voidEnt);
 			break;
 		case 1:
 			GameObject solidGameObject = new GameObject(name, x, y, true);
 			solidGameObject.innitSheet(name + ".png");
-			gp.entLoader.loadEntity(solidGameObject);
+			GamePanel.entLoader.loadEntity(solidGameObject);
 			break;
 		case 2:
 			GameObject nonSolidGameObject = new GameObject(name, x, y, false);
 			nonSolidGameObject.innitSheet(name + ".png");
-			gp.entLoader.loadEntity(nonSolidGameObject);
+			GamePanel.entLoader.loadEntity(nonSolidGameObject);
 			break;
 		case 3:
 			GameObject invisibleGameObject = new GameObject(name, x, y, true);
-			gp.entLoader.loadEntity(invisibleGameObject);
+			GamePanel.entLoader.loadEntity(invisibleGameObject);
 			gp.setInvisibleEntity(invisibleGameObject);
 		}
 			

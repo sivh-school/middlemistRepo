@@ -10,13 +10,6 @@ public class KeyHandler implements KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		int code = e.getKeyChar();
-		if (code == KeyEvent.VK_ESCAPE) {
-			escKey = !escKey;
-		}
-		if (code == KeyEvent.VK_E) {
-			invKey = !invKey;
-		}
 	}
 
 	@Override
@@ -38,6 +31,12 @@ public class KeyHandler implements KeyListener{
 			lastKeyPressed = "d";
 			dKey = true;
 		}
+		if (code == KeyEvent.VK_E) {
+			invKey = !invKey;
+		}
+        if (code == KeyEvent.VK_ESCAPE) {
+            escKey = !escKey;
+        }
 	}
 
 	@Override
