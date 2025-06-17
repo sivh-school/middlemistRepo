@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -12,13 +14,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextArea;
 
 import entity.ItemEntity;
 import entity.Player;
@@ -188,12 +193,16 @@ public class InventoryMenu extends JPanel {
                     System.out.println("Dropping item: " + actionItem.name);
                     System.out.println("Item ID: " + idx);
                     ItemEntity droppedItem = new ItemEntity(actionItem.name, player.x, player.y + GamePanel.player.height + 4, actionItem);
-                    GamePanel.entLoader.loadEntity(droppedItem);
-                    player.inventory.remove(actionItem);
-                    items.remove(actionItem);
-                    allItems.remove(itemD);
-                    selectedItems.remove(itemD);
-                    updateInventory();
+                    if (!(GamePanel.world.checkWorldCollision(droppedItem.entCollide))){
+						GamePanel.entLoader.loadEntity(droppedItem);
+						player.inventory.remove(actionItem);
+						items.remove(actionItem);
+						allItems.remove(itemD);
+						updateInventory();
+					} else {
+						GamePanel.entLoader.removeEntity(droppedItem);
+						System.out.println("Cannot drop item here, world collision detected.");
+					}
                 }
             });
             itemPopup.add(itemDrop);
@@ -230,6 +239,50 @@ public class InventoryMenu extends JPanel {
         charLabel.setPreferredSize(new Dimension(charLabel.getIcon().getIconWidth(), charLabel.getIcon().getIconHeight()));
         charLabel.setVerticalAlignment(JLabel.CENTER);
         displayPane.add(charLabel);
+        JTextArea charStats = new JTextArea();
+        charStats.setPreferredSize(new Dimension(200, 150));
+        charStats.setAlignmentX(RIGHT_ALIGNMENT);
+        charStats.setAlignmentY(CENTER_ALIGNMENT);
+        charStats.setBackground(displayPane.getBackground());
+        charStats.setEditable(false);
+        charStats.setText("Name: " + GamePanel.player.entName + "\n" +
+						  "Health: " + GamePanel.player.health + "/" + GamePanel.player.maxHealth + "\n" +
+						  "Level: " + GamePanel.player.level + "\n" +
+						  "Experience: " + GamePanel.player.xp + "\n" +
+						  "Inventory Size: " + GamePanel.player.inventory.size() + "/" + InventoryMenu.inventoryMax);
+        try {
+			charStats.setFont(Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("/res/fonts/super-pixel-font/SuperPixel-m2L8j.ttf")).deriveFont(14f));
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        displayPane.add(charStats);
+        JButton changeNameButton = new JButton("Change Name");
+        changeNameButton.setPreferredSize(new Dimension(150, 30));
+        changeNameButton.setAlignmentX(RIGHT_ALIGNMENT);
+        changeNameButton.setAlignmentY(CENTER_ALIGNMENT);
+        changeNameButton.setBackground(Color.LIGHT_GRAY);
+        try {
+			changeNameButton.setFont(Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("/res/fonts/super-pixel-font/SuperPixel-m2L8j.ttf")).deriveFont(10f));
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        changeNameButton.addActionListener(e -> {
+			String newName = JOptionPane.showInputDialog("Enter new name:");
+			if (newName != null && !newName.trim().isEmpty()) {
+				GamePanel.player.entName = newName.trim();
+				charStats.setText("Name: " + GamePanel.player.entName + "\n" +
+								  "Health: " + GamePanel.player.health + "/" + GamePanel.player.maxHealth + "\n" +
+								  "Level: " + GamePanel.player.level + "\n" +
+								  "Experience: " + GamePanel.player.xp + "\n" +
+								  "Inventory Size: " + GamePanel.player.inventory.size() + "/" + InventoryMenu.inventoryMax);
+			}
+			GamePanel.gamePanel.requestFocus(); // Ensure focus returns to the game panel after input
+		});
+        displayPane.add(changeNameButton);
         displayPane.revalidate();
         displayPane.repaint();
     }
@@ -252,8 +305,8 @@ public class InventoryMenu extends JPanel {
         InventoryMenu.switchMenu("Inventory");
         im.setVisible(!im.isVisible());
         GamePanel.gamePanel.togglePause();
-        GamePanel.gamePanel.requestFocus();
-        
+        GamePanel.gamePanel.enableInputMethods(!im.isVisible());
+        GamePanel.gamePanel.requestFocus(); 
     }
 
     public static void switchMenu(String menu) {

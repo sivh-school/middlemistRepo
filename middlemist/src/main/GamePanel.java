@@ -17,8 +17,10 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.EntityLoader;
 import entity.ItemEntity;
+import entity.Npc;
 import entity.Player;
 import entity.SpriteHandler;
+import interaction.DialogPanel;
 import item.Item;
 import world.World;
 
@@ -77,6 +79,9 @@ public class GamePanel extends JPanel implements Runnable {
 		ItemEntity test2 = new ItemEntity("test2", 200, 100, new Item("test2"));
 		test2.itemPickup.setIcon("/res/sprites/player.png");
 		entLoader.loadEntity(test2);
+		Npc testNpc = new Npc("TestNpc", 300, 100, true);
+		testNpc.newDialog("Hello, I am a test NPC! Press space to continue, or click the dialog panel!NEXT_DIALOGLmao", 100);
+		entLoader.loadEntity(testNpc);
 	}
 
 	//Methods
@@ -105,7 +110,6 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void togglePause() {
 	    paused = !paused;
-	    System.out.println("Toggling pause... Game paused: " + paused);
 	    if (paused) {
 	        pause();
 	    } else {
@@ -173,6 +177,8 @@ public class GamePanel extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
+		DialogPanel.toggleVisibility();
+		DialogPanel.loadDialog("Welcome to middlemist! This is a test dialog. Press space to continue, or click the dialog panel!NEXT_DIALOGI hope you enjoy!");
 	    double drawInterval = 1000000000.0 / fps;
 	    double delta = 0;
 	    long lastTime = System.nanoTime();

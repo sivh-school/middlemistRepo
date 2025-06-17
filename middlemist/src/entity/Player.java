@@ -92,6 +92,15 @@ public class Player extends Entity{
 				idleFrame = !idleFrame;
 			}
 		}
+		if (keyH.intKey) {
+			for (Entity ent : GamePanel.gamePanel.entities) {
+				System.out.println("Checking interaction with: " + ent.entName);
+				if (ent instanceof entity.Npc) {
+					((Npc) ent).checkDialog();
+				}
+			}
+			keyH.intKey = false; // Prevents toggling interaction multiple times
+		}
 			switch (keyH.lastKeyPressed) {
 				case "w":
 					if (keyH.wKey) {
@@ -212,12 +221,10 @@ public class Player extends Entity{
 	
 	public void pauseUpdate() {
 		if (keyH.escKey) {
-			System.out.println("Escape key pressed");
 			PausePanel.toggleVisibility();
 			keyH.escKey = false; // Reset the escape key to prevent repeated toggling
 		}
 		if (keyH.invKey) {
-			System.out.println("Inventory key pressed");
 			InventoryMenu.toggleVisibility();
 			keyH.invKey = false; // Prevents toggling inventory multiple times
 		}

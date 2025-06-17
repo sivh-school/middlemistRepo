@@ -29,6 +29,7 @@ public class PausePanel extends JPanel{
 	public static void toggleVisibility() {
 		pp.setVisible(!pp.isVisible());
 	    GamePanel.gamePanel.togglePause();
+	    GamePanel.gamePanel.enableInputMethods(!pp.isVisible());
 	    GamePanel.gamePanel.requestFocus();
 	}
 }

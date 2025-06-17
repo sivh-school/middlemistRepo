@@ -33,13 +33,9 @@ public class World{
 	}
 	
 	public boolean checkWorldCollision(EntityCollider entCol) {
-		if (entCol.canCollide) {
-	        return !(x <= entCol.x + entCol.width &&
-	               x + worldW >= entCol.x &&
-	               y <= entCol.y + entCol.height &&
-	               y + worldH >= entCol.y);
-	    } else {
-	        return false;
-	    }
+	    return !(x + entCol.width <= entCol.x + entCol.width &&
+	           x + worldW >= entCol.x + entCol.width &&
+	           y + entCol.height <= entCol.y + entCol.height &&
+	           y + worldH >= entCol.y + entCol.height);
 	}
 }
