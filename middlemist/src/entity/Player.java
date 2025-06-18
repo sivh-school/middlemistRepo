@@ -208,13 +208,13 @@ public class Player extends Entity{
 	public String updateCharacter() {
 		String iconPath = null;
 		if (health >= maxHealth) {
-			iconPath = "/res/sprites/player.png";
+			iconPath = "/res/sprites/middlemistFull.png";
 		}
 		else if (health >= maxHealth / 2) {
-			iconPath = "/res/sprites/player.png";
+			iconPath = "/res/sprites/middlemistFull.png";
 		}
 		else {
-			iconPath = "/res/sprite/player.png";
+			iconPath = "/res/sprite/middlemistFull.png";
 		}
 		return iconPath;
 	}

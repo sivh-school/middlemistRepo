@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -234,14 +235,15 @@ public class InventoryMenu extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ImageIcon charIcon = new ImageIcon(charImage);
+        ImageIcon charIcon = new ImageIcon();
+        charIcon.setImage(charImage.getScaledInstance((int) (charImage.getWidth() * 2) - 64, (int) (charImage.getHeight() * 2) - 64, Image.SCALE_SMOOTH));
         JLabel charLabel = new JLabel(charIcon, JLabel.CENTER);
         charLabel.setPreferredSize(new Dimension(charLabel.getIcon().getIconWidth(), charLabel.getIcon().getIconHeight()));
-        charLabel.setVerticalAlignment(JLabel.CENTER);
+        charLabel.setVerticalAlignment(JLabel.TOP);
         displayPane.add(charLabel);
         JTextArea charStats = new JTextArea();
         charStats.setPreferredSize(new Dimension(200, 150));
-        charStats.setAlignmentX(RIGHT_ALIGNMENT);
+        charStats.setAlignmentX(CENTER_ALIGNMENT);
         charStats.setAlignmentY(CENTER_ALIGNMENT);
         charStats.setBackground(displayPane.getBackground());
         charStats.setEditable(false);
@@ -260,7 +262,7 @@ public class InventoryMenu extends JPanel {
         displayPane.add(charStats);
         JButton changeNameButton = new JButton("Change Name");
         changeNameButton.setPreferredSize(new Dimension(150, 30));
-        changeNameButton.setAlignmentX(RIGHT_ALIGNMENT);
+        changeNameButton.setAlignmentX(CENTER_ALIGNMENT);
         changeNameButton.setAlignmentY(CENTER_ALIGNMENT);
         changeNameButton.setBackground(Color.LIGHT_GRAY);
         try {

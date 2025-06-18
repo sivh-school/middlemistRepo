@@ -70,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
 		entLoader = new EntityLoader();
 		world = new World(this);
 		innitWorld(1);
-		player = new Player("Player", (screenW / 2) - (tileSize / 2), (screenH / 2) - (tileSize / 2), this);
+		player = new Player("middlemist", (screenW / 2) - (tileSize / 2), (screenH / 2) - (tileSize / 2), this);
 		player.innitSheet("player.png");
 		entLoader.loadEntity(player);
 		ItemEntity test = new ItemEntity("test", 100, 100, new Item("test"));
