@@ -45,7 +45,6 @@ public class KeyHandler implements KeyListener{
         }
         if (code == KeyEvent.VK_F) {
         	if (!(pauseE || pauseI || pauseF)) {
-        		pauseF = !pauseF;
 				intKey = !intKey;
 			}
 		}

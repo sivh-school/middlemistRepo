@@ -37,4 +37,11 @@ public class Npc extends Entity {
 	    }
 	}
 	
+	public boolean confirmDist() {
+		int dx = (this.x + this.width/2) - (GamePanel.player.x + GamePanel.player.width/2);
+	    int dy = (this.y + this.height/2) - (GamePanel.player.y + GamePanel.player.height/2);
+	    double dist = Math.sqrt(dx * dx + dy * dy);
+
+	    return dist <= this.distance;
+	}
 }

@@ -93,10 +93,16 @@ public class Player extends Entity{
 			}
 		}
 		if (keyH.intKey) {
+			keyH.pauseF = true;
 			for (Entity ent : GamePanel.gamePanel.entities) {
 				System.out.println("Checking interaction with: " + ent.entName);
 				if (ent instanceof entity.Npc) {
-					((Npc) ent).checkDialog();
+					if (((Npc) ent).confirmDist()) {
+						((Npc) ent).checkDialog();
+					}
+					else {
+						keyH.pauseF = false; // Reset pause if no interaction is confirmed
+					}
 				}
 			}
 			keyH.intKey = false; // Prevents toggling interaction multiple times
