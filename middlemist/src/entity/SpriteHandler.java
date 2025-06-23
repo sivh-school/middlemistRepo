@@ -15,12 +15,12 @@ public class SpriteHandler {
 
 	public BufferedImage getSprite(Entity ent) {
 		if (ent.spriteSheet == null) {
-			ent.innitSheet("/res/sprites/exc.png");
+			ent.innitSheet("exc.png");
 		}
 		BufferedImage sprite = null;
 		int spriteX = 0, spriteY = 0, colCount = 0, rowCount = 0, sheetW = ent.spriteSheet.getWidth(), sheetH = ent.spriteSheet.getHeight();
-		int maxCols = sheetW / gp.tileSize;
-		int maxRows = sheetH / gp.tileSize;
+		int maxCols = sheetW / ent.width;
+		int maxRows = sheetH / ent.height;
 		int maxSprites = maxCols * maxRows;
 		for (int i = 0; i < ent.spriteIndex; i++) {
 		    colCount++;
@@ -39,15 +39,15 @@ public class SpriteHandler {
 			colCount = 0;
 			rowCount = 0;
 		}
-		spriteX = colCount * gp.tileSize;
-		spriteY = rowCount * gp.tileSize;
+		spriteX = colCount * ent.width;
+		spriteY = rowCount * ent.height;
 		if (spriteX < sheetW && spriteY < sheetH) {
-			sprite = ent.spriteSheet.getSubimage(spriteX, spriteY, gp.tileSize, gp.tileSize);
+			sprite = ent.spriteSheet.getSubimage(spriteX, spriteY, ent.width, ent.height);
 		}
 		else {
 			ent.spriteIndex = 0; // Reset to first sprite if out of bounds
 			try {
-				sprite = ent.spriteSheet.getSubimage(0, 0, gp.tileSize, gp.tileSize);
+				sprite = ent.spriteSheet.getSubimage(0, 0, ent.width, ent.height);
 			}
 			catch (Exception e) {
 				System.err.println("Err. Sprite sheet too small, formatted improperly or does not exist");
@@ -70,7 +70,7 @@ public class SpriteHandler {
 			ent.spriteIndex = 0; // Reset to first sprite if out of bounds
 			ent.frameCount++;
 			try {
-				sprite = ent.spriteSheet.getSubimage(0, 0, gp.tileSize, gp.tileSize);
+				sprite = ent.spriteSheet.getSubimage(0, 0, ent.width, ent.height);
 			}
 			catch (Exception e) {
 				System.err.println("Err. Sprite sheet too small, formatted improperly or does not exist");

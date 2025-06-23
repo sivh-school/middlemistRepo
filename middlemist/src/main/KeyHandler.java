@@ -5,15 +5,11 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
 
-	public boolean wKey, sKey, aKey, dKey, escKey = false;
+	public boolean wKey, sKey, aKey, dKey, escKey = false, invKey = false, intKey = false, pauseE = false, pauseI = false, pauseF = false;
 	public String lastKeyPressed = "";
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		int code = e.getKeyChar();
-		if (code == KeyEvent.VK_ESCAPE) {
-			escKey = !escKey;
-		}
 	}
 
 	@Override
@@ -34,6 +30,23 @@ public class KeyHandler implements KeyListener{
 		if (code == KeyEvent.VK_D) {
 			lastKeyPressed = "d";
 			dKey = true;
+		}
+		if (code == KeyEvent.VK_E) {
+			if (!(pauseE || pauseF)) {
+				pauseI = !pauseI;
+				invKey = !invKey;
+			}
+		}
+        if (code == KeyEvent.VK_ESCAPE) {
+			if (!(pauseF || pauseI)) {
+	        	pauseE = !pauseE;
+				escKey = !escKey;
+			}
+        }
+        if (code == KeyEvent.VK_F) {
+        	if (!(pauseE || pauseI || pauseF)) {
+				intKey = !intKey;
+			}
 		}
 	}
 

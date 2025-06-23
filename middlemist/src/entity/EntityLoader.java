@@ -21,14 +21,17 @@ public class EntityLoader {
 				unloadedEnts.remove(ent);
 			}
 			loadedEnts.add(ent);
+			if (!(EntityCollider.colliders.contains(ent.entCollide))) {
+				EntityCollider.colliders.add(ent.entCollide);
+			}
 			System.out.println("Entity " + ent.entName + " appended successfully.");
 		}
 	}
 	
 	public void reloadEntity(Entity ent) {
 		if (loadedEnts.contains(ent)) {
-			unloadedEnts.remove(ent);
-			loadedEnts.add(ent);
+			unloadEntity(ent);
+			loadEntity(ent);
 		} else {
 			System.err.println("Entity " + ent.entName + " is not loaded. Cannot reload.");
 		}
@@ -42,5 +45,19 @@ public class EntityLoader {
 			loadedEnts.remove(ent);
 		}
 		unloadedEnts.add(ent);
+		EntityCollider.colliders.remove(ent.entCollide);
+	}
+	
+	public void removeEntity(Entity ent) {
+		if (initializedEnts.contains(ent)) {
+			initializedEnts.remove(ent);
+		}
+		if (loadedEnts.contains(ent)) {
+			loadedEnts.remove(ent);
+		}
+		if (unloadedEnts.contains(ent)) {
+			unloadedEnts.remove(ent);
+		}
+		ent = null;
 	}
 }
